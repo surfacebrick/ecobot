@@ -1,0 +1,2630 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="showroom">
+  <title>ECOBOT — El pequeño guardián del planeta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Showroom: Page and surfaces */
+      --background: #fbfbfd;
+      --surface-container-low: #f5f5f7;
+      --surface-container: #e8e8ed;
+      --surface-container-high: #dcdce1;
+
+      /* Showroom: Ink */
+      --on-surface: #1d1d1f;
+      --on-surface-variant: #6e6e73;
+
+      /* Showroom: Rules */
+      --outline: #d2d2d7;
+      --outline-variant: #e5e5ea;
+
+      /* Showroom: Accents */
+      --primary: #006bd6;
+      --primary-hover: #0058b0;
+      --on-primary: #ffffff;
+      --primary-container: #e8f1fd;
+      --on-primary-container: #0058b0;
+      --secondary: #bf4800;
+      --tertiary: #1d1d1f;
+      --error: #d70015;
+      --error-container: #fdebec;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #248a3d;
+      --positive-container: #eaf6ed;
+      --warning: #b25000;
+      --warning-container: #fff3e6;
+      --focus: #006bd6;
+
+      /* Data series */
+      --data-1: #006bd6;
+      --data-2: #bf4800;
+      --data-3: #248a3d;
+      --data-4: #8944ab;
+      --data-context: #aeaeb2;
+
+      /* Illustration tokens for ECOBOT & circuit SVG */
+      --bot-cardboard: #d9bf96;
+      --bot-cardboard-shade: #c2a476;
+      --bot-cardboard-edge: #9b7d51;
+      --bot-pet: #e6f0fa;
+      --bot-pet-highlight: #ffffff;
+      --bot-pet-stroke: #b9cde2;
+      --bot-green: #248a3d;
+      --bot-green-dark: #19692d;
+      --bot-blue-cap: #006bd6;
+      --bot-blue-cap-dark: #004e9e;
+      --bot-spidey-red: #d70015;
+      --bot-spidey-red-dark: #9e0010;
+      --bot-led-off: #9ec5f0;
+      --bot-led-on: #3da5ff;
+      --bot-led-core: #ffffff;
+      --bot-metal: #8e8e93;
+      --bot-metal-dark: #48484a;
+      --bot-eraser: #f28b82;
+      --bot-battery: #2c2c2e;
+      --bot-battery-top: #bf4800;
+      --bot-pcb: #0058b0;
+      --code-bg: #1d1d1f;
+      --code-text: #f5f5f7;
+      --code-muted: #98989d;
+      --code-keyword: #64b5f6;
+      --code-number: #ffb74d;
+      --code-highlight: #2c2c30;
+
+      /* Fonts */
+      --font-headline: 'Inter Tight', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-label: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Narrative Type Scale */
+      --display-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+      --headline-size: clamp(1.875rem, 1.25rem + 2vw, 2.75rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.25vw, 1.125rem);
+      --label-size: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+
+      /* Shape */
+      --rounded: 9999px;
+      --rounded-md: 0.75rem;
+      --rounded-lg: 1.25rem;
+      --rounded-full: 9999px;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Style effects */
+      --headline-tracking: -0.035em;
+      --section-tracking: -0.025em;
+      --figure-tracking: -0.03em;
+      --tile-shadow-hover: 0 8px 28px rgb(0 0 0 / 0.08);
+      --led-glow-shadow: 0 0 18px rgb(61 165 255 / 0.85);
+      --chevron: " \203A";
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-inline: var(--space-lg);
+    }
+    .container * { min-width: 0; }
+
+    /* Top Showroom Header */
+    .site-header {
+      background: var(--background);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-block: var(--space-md);
+    }
+    .header-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .brand-name {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .chip-green {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .chip-orange {
+      background: var(--warning-container);
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding-inline: var(--space-sm);
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      border-radius: var(--rounded);
+      transition: color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .nav-link:hover {
+      color: var(--primary);
+      background: var(--surface-container-low);
+    }
+
+    /* Bands */
+    .band {
+      padding-block: var(--space-2xl);
+      background: var(--background);
+    }
+    .band.alt {
+      background: var(--surface-container-low);
+    }
+    .band.alt .tile {
+      background: var(--background);
+    }
+
+    /* Centered Headline Stack */
+    .headline-stack {
+      text-align: center;
+      padding-bottom: var(--space-xl);
+    }
+    .hero-stack {
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-xl);
+    }
+    .eyebrow {
+      display: inline-block;
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    .headline-stack h1 {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--headline-tracking);
+      line-height: 1.05;
+      color: var(--on-surface);
+      margin: 0 auto;
+      max-width: 16ch;
+    }
+    .headline-stack h2 {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: var(--section-tracking);
+      line-height: 1.08;
+      color: var(--on-surface);
+      margin: 0 auto;
+      max-width: 22ch;
+    }
+    .headline-stack .lede {
+      color: var(--on-surface-variant);
+      font-size: var(--subhead-size);
+      line-height: 1.45;
+      max-width: 48ch;
+      margin: var(--space-md) auto 0;
+    }
+
+    /* Pill Actions & Chevron Links */
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      background: var(--primary);
+      color: var(--on-primary);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: var(--space-sm) var(--space-lg);
+      border: 0;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: var(--space-sm) var(--space-lg);
+      border: 0;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+    .link-more {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding-inline: var(--space-sm);
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .link-more::after {
+      content: var(--chevron);
+      margin-left: var(--space-xs);
+    }
+    .link-more:hover {
+      text-decoration: underline;
+    }
+
+    /* Tiles */
+    .tile {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl) var(--space-lg);
+      border: 0;
+    }
+    .tile-interactive {
+      transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+      cursor: pointer;
+    }
+    .tile-interactive:hover {
+      box-shadow: var(--tile-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Key Figure Tiles */
+    .figures-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .tile.figure {
+      text-align: center;
+      padding: var(--space-xl) var(--space-md);
+    }
+    .tile.figure .fig-label {
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+    .tile.figure .value {
+      font-family: var(--font-headline);
+      font-size: clamp(2.25rem, 1.8rem + 1.8vw, 3.25rem);
+      font-weight: 700;
+      letter-spacing: var(--figure-tracking);
+      line-height: 1.08;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .tile.figure .value .unit {
+      font-size: 0.52em;
+      font-weight: 600;
+      margin-left: var(--space-xs);
+    }
+    .tile.figure .caption {
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      font-weight: 500;
+      margin-top: var(--space-xs);
+    }
+
+    /* Hero Stage */
+    .hero-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      align-items: center;
+      gap: var(--space-xl);
+      padding: var(--space-xl);
+    }
+    .hero-bot-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 360px;
+    }
+    .hero-status-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .hero-status-panel h3 {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .hero-status-panel p {
+      color: var(--on-surface-variant);
+      margin: 0;
+      max-width: 44ch;
+    }
+    .phase-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .phase-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded-md);
+      background: var(--background);
+      transition: background-color var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out);
+    }
+    .band:not(.alt) .hero-stage .phase-item {
+      background: var(--background);
+    }
+    .phase-item.active {
+      background: var(--primary-container);
+      box-shadow: inset 0 0 0 2px var(--primary);
+    }
+    .phase-title {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+    .phase-desc {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .phase-time {
+      font-family: var(--font-mono);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    /* ECOBOT SVG classes */
+    .svg-cardboard { fill: var(--bot-cardboard); stroke: var(--bot-cardboard-edge); stroke-width: 2; }
+    .svg-cardboard-shade { fill: var(--bot-cardboard-shade); stroke: var(--bot-cardboard-edge); stroke-width: 2; }
+    .svg-pet { fill: var(--bot-pet); stroke: var(--bot-pet-stroke); stroke-width: 2.5; opacity: 0.92; }
+    .svg-pet-shine { fill: var(--bot-pet-highlight); opacity: 0.65; }
+    .svg-green { fill: var(--bot-green); stroke: var(--bot-green-dark); stroke-width: 2; }
+    .svg-blue-cap { fill: var(--bot-blue-cap); stroke: var(--bot-blue-cap-dark); stroke-width: 2; }
+    .svg-spidey-red { fill: var(--bot-spidey-red); stroke: var(--bot-spidey-red-dark); stroke-width: 1.5; }
+    .svg-led { fill: var(--bot-led-off); transition: fill var(--dur-micro) var(--ease-out), filter var(--dur-micro) var(--ease-out); }
+    .svg-led.on { fill: var(--bot-led-on); filter: drop-shadow(0 0 8px var(--bot-led-on)); }
+    .svg-led-core { fill: var(--bot-led-core); opacity: 0.35; transition: opacity var(--dur-micro) var(--ease-out); }
+    .svg-led.on + .svg-led-core { opacity: 0.95; }
+    .svg-metal { fill: var(--bot-metal); stroke: var(--bot-metal-dark); stroke-width: 1.5; }
+    .svg-eraser { fill: var(--bot-eraser); stroke: var(--bot-cardboard-edge); stroke-width: 1.5; }
+    .svg-battery { fill: var(--bot-battery); }
+    .svg-battery-top { fill: var(--bot-battery-top); }
+    .svg-pcb { fill: var(--bot-pcb); }
+    .svg-white { fill: var(--on-primary); }
+    .svg-dark { fill: var(--on-surface); }
+
+    @keyframes ecobotVibrate {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-3px, -1px) rotate(-0.8deg); }
+      40% { transform: translate(3px, 1px) rotate(0.8deg); }
+      60% { transform: translate(-2px, 1px) rotate(-0.5deg); }
+      80% { transform: translate(2px, -1px) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    @keyframes spinWeight {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .ecobot-vibrating {
+      animation: ecobotVibrate 110ms linear infinite;
+      transform-origin: center bottom;
+    }
+    .motor-spinning {
+      animation: spinWeight 160ms linear infinite;
+      transform-origin: 180px 302px;
+    }
+
+    /* Anatomy Interactive Explorer */
+    .anatomy-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: stretch;
+    }
+    .anatomy-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .hotspot-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .pill-tab {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: 0;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+    }
+    .pill-tab:hover {
+      background: var(--surface-container-high);
+    }
+    .pill-tab.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .svg-hotspot {
+      cursor: pointer;
+      transition: transform var(--dur-short) var(--ease-out);
+    }
+    .svg-hotspot-ring {
+      fill: var(--background);
+      stroke: var(--primary);
+      stroke-width: 2.5;
+      transition: fill var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+    .svg-hotspot-num {
+      fill: var(--primary);
+      font-family: var(--font-label);
+      font-size: 13px;
+      font-weight: 700;
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+    }
+    .svg-hotspot.active .svg-hotspot-ring {
+      fill: var(--primary);
+    }
+    .svg-hotspot.active .svg-hotspot-num {
+      fill: var(--on-primary);
+    }
+
+    .detail-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .detail-card h3 {
+      font-family: var(--font-headline);
+      font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: var(--space-xs) 0 0;
+    }
+    .detail-specs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .spec-box {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+    }
+    .spec-box-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .spec-box-val {
+      font-weight: 600;
+      color: var(--on-surface);
+      margin-top: var(--space-xs);
+    }
+    .pro-tip {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      font-size: 0.9375rem;
+    }
+    .pro-tip strong {
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Bento Grid of Materials */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .bento-card h3 {
+      font-family: var(--font-headline);
+      font-size: 1.1875rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin: var(--space-sm) 0 var(--space-xs);
+    }
+    .bento-card ul {
+      margin: var(--space-sm) 0 0;
+      padding-left: 1.15rem;
+      color: var(--on-surface-variant);
+      font-size: 0.9375rem;
+    }
+    .bento-card li + li {
+      margin-top: var(--space-xs);
+    }
+
+    /* Step-by-Step Builder */
+    .stepper-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .step-tile {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: var(--space-xl);
+      align-items: center;
+    }
+    .step-content h3 {
+      font-family: var(--font-headline);
+      font-size: clamp(1.375rem, 1.15rem + 0.8vw, 1.875rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: var(--space-sm) 0;
+    }
+    .step-content p {
+      color: var(--on-surface-variant);
+      max-width: 54ch;
+      margin: 0 0 var(--space-md);
+    }
+    .step-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .step-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .step-visual {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+    }
+
+    /* Circuit Simulator */
+    .circuit-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: var(--space-lg);
+      align-items: stretch;
+    }
+    .circuit-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .switch-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .switch-info strong {
+      display: block;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+    .switch-info span {
+      display: block;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+    .toggle-btn {
+      min-width: 72px;
+      min-height: 44px;
+      border-radius: var(--rounded);
+      border: 0;
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+    }
+    .toggle-btn[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .circuit-wire {
+      fill: none;
+      stroke: var(--outline);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke var(--dur-short) var(--ease-out);
+    }
+    .circuit-wire.active-blue {
+      stroke: var(--primary);
+    }
+    .circuit-wire.active-orange {
+      stroke: var(--secondary);
+    }
+    .circuit-wire.active-green {
+      stroke: var(--positive);
+    }
+    .circuit-wire.active-red {
+      stroke: var(--error);
+    }
+    .circuit-label {
+      fill: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .circuit-sub {
+      fill: var(--on-surface-variant);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    /* Pinout Table */
+    .table-tile {
+      margin-top: var(--space-lg);
+      overflow-x: auto;
+    }
+    .table-tile h3 {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 var(--space-md);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9375rem;
+    }
+    th {
+      color: var(--on-surface-variant);
+      font-weight: 500;
+      font-size: var(--label-size);
+      padding: var(--space-sm) var(--space-md) var(--space-sm) 0;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    td {
+      padding: var(--space-md) var(--space-md) var(--space-md) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    tr:last-child td {
+      border-bottom: 0;
+    }
+    .mono-badge {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--surface-container-low);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: var(--on-surface);
+    }
+    .band.alt .mono-badge {
+      background: var(--surface-container-low);
+    }
+
+    /* Code Playground */
+    .code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: var(--space-lg);
+      align-items: stretch;
+    }
+    .code-window {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .code-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .code-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .code-action-btn {
+      min-height: 34px;
+      padding: 4px 12px;
+      border-radius: var(--rounded);
+      border: 1px solid #3a3a3c;
+      background: #2c2c2e;
+      color: var(--code-text);
+      font-family: var(--font-label);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .code-action-btn:hover {
+      background: #3a3a3c;
+    }
+    .code-filename {
+      font-family: var(--font-mono);
+      font-size: var(--label-size);
+      color: var(--code-muted);
+    }
+    .code-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .code-tab {
+      min-height: 36px;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      border: 0;
+      background: var(--code-highlight);
+      color: var(--code-text);
+      font-size: var(--label-size);
+      cursor: pointer;
+    }
+    .code-tab.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .code-block {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .code-line {
+      display: block;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .code-line.highlight {
+      background: var(--code-highlight);
+    }
+    .code-explain {
+      background: var(--code-highlight);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      font-size: 0.9375rem;
+      color: var(--code-text);
+    }
+
+    .sliders-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .control-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .control-label-row label {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+    .control-val {
+      font-family: var(--font-mono);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .mini-sim-bar {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .mini-led-dots {
+      display: flex;
+      gap: var(--space-sm);
+    }
+    .mini-led-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: var(--rounded-full);
+      background: var(--bot-led-off);
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .mini-led-dot.on {
+      background: var(--bot-led-on);
+      box-shadow: var(--led-glow-shadow);
+    }
+
+    /* Checklist, Troubleshooting, Speech, Quiz */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .check-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      text-align: left;
+      width: 100%;
+      border: 0;
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      background: var(--background);
+      cursor: pointer;
+      transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+    .check-card:hover {
+      box-shadow: var(--tile-shadow-hover);
+      transform: translateY(-2px);
+    }
+    .check-box {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+    }
+    .check-card[aria-pressed="true"] .check-box {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+    .check-card strong {
+      display: block;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+    .check-card span {
+      display: block;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    .speech-tile {
+      margin-top: var(--space-xl);
+    }
+    .speech-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .speech-paragraphs {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .speech-para {
+      padding: var(--space-md);
+      border-radius: var(--rounded-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      max-width: 66ch;
+      transition: background-color var(--dur-short) var(--ease-out), opacity var(--dur-short) var(--ease-out);
+    }
+    .speech-para.dimmed {
+      opacity: 0.45;
+    }
+    .speech-para.active {
+      background: var(--primary-container);
+    }
+
+    /* Quiz */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .quiz-card h4 {
+      font-family: var(--font-headline);
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin: 0 0 var(--space-md);
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .quiz-opt {
+      min-height: 44px;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded-md);
+      border: 0;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background: var(--surface-container);
+    }
+    .quiz-opt.correct {
+      background: var(--positive-container);
+      color: var(--positive);
+      font-weight: 600;
+    }
+    .quiz-opt.wrong {
+      background: var(--error-container);
+      color: var(--error);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-sm);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      min-height: 1.4em;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding-block: var(--space-xl);
+      border-top: 1px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      text-align: center;
+    }
+    .site-footer p {
+      margin: var(--space-xs) auto;
+      max-width: 72ch;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 880px) {
+      .hero-stage,
+      .anatomy-grid,
+      .step-tile,
+      .circuit-grid,
+      .code-grid {
+        grid-template-columns: 1fr;
+      }
+      .figures-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .figures-grid,
+      .checklist-grid,
+      .quiz-grid,
+      .detail-specs {
+        grid-template-columns: 1fr;
+      }
+      .tile {
+        padding: var(--space-lg) var(--space-md);
+      }
+      .band {
+        padding-block: var(--space-xl);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-name">ECOBOT</span>
+        <span class="chip">ROBOTCASC 2026</span>
+      </div>
+      <nav class="nav-links" aria-label="Secciones principales">
+        <a class="nav-link" href="#anatomia">Anatomía</a>
+        <a class="nav-link" href="#construccion">Construcción</a>
+        <a class="nav-link" href="#circuito">Circuito</a>
+        <a class="nav-link" href="#codigo">Código</a>
+        <a class="nav-link" href="#pruebas">Pruebas y guion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- BAND 1: HERO -->
+    <section class="band" id="inicio">
+      <div class="container">
+        <div class="headline-stack hero-stack">
+          <span class="eyebrow">Colegio Adventista Santa Cruz · 3ro. A – Tarde</span>
+          <h1>ECOBOT. El pequeño guardián del planeta.</h1>
+          <p class="lede">Un robot educativo hecho con una botella PET de 3 litros, cartón corrugado, tapitas plásticas y brazos reciclados de Spider-Man, controlado por Arduino UNO.</p>
+          <div class="action-row">
+            <button type="button" class="btn-primary" id="hero-toggle-btn" onclick="toggleHeroCycle()">
+              Encender a ECOBOT
+            </button>
+            <a class="link-more" href="#anatomia">Descubrir sus piezas</a>
+          </div>
+        </div>
+
+        <div class="tile hero-stage reveal">
+          <div class="hero-bot-wrap">
+            <svg id="hero-ecobot-svg" viewBox="0 0 360 390" width="320" height="350" role="img" aria-label="Ilustración interactiva de ECOBOT mostrando su cabeza de cartón, ojos LED azules, antenas verdes, torso de botella PET de 3 litros con escudo de reciclaje, brazos reciclados de Spider-Man y pies de tapas azules.">
+              <g id="hero-bot-body">
+                <!-- Antenas -->
+                <rect x="136" y="34" width="6" height="32" rx="3" class="svg-dark"/>
+                <rect x="218" y="34" width="6" height="32" rx="3" class="svg-dark"/>
+                <rect x="128" y="22" width="22" height="14" rx="4" class="svg-green"/>
+                <rect x="210" y="22" width="22" height="14" rx="4" class="svg-green"/>
+
+                <!-- Orejas -->
+                <rect x="88" y="88" width="14" height="36" rx="5" class="svg-green"/>
+                <rect x="258" y="88" width="14" height="36" rx="5" class="svg-green"/>
+
+                <!-- Cabeza cúbica -->
+                <rect x="102" y="64" width="156" height="94" rx="12" class="svg-cardboard"/>
+                <rect x="110" y="72" width="140" height="78" rx="8" class="svg-cardboard-shade"/>
+
+                <!-- Ojos tapas azules + LEDs 5 mm -->
+                <circle cx="145" cy="110" r="22" class="svg-blue-cap"/>
+                <circle cx="215" cy="110" r="22" class="svg-blue-cap"/>
+                <circle id="hero-led-left" cx="145" cy="110" r="10" class="svg-led"/>
+                <circle cx="145" cy="110" r="4" class="svg-led-core"/>
+                <circle id="hero-led-right" cx="215" cy="110" r="10" class="svg-led"/>
+                <circle cx="215" cy="110" r="4" class="svg-led-core"/>
+
+                <!-- Collarín cuello -->
+                <rect x="148" y="158" width="64" height="18" rx="4" class="svg-cardboard-shade"/>
+
+                <!-- Brazos reciclados de muñeco Spider-Man -->
+                <g>
+                  <path d="M124 190 L84 224 L96 254" fill="none" stroke="var(--bot-spidey-red-dark)" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M124 190 L84 224" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round"/>
+                  <path d="M84 224 L96 254" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+                  <circle cx="98" cy="264" r="10" class="svg-spidey-red"/>
+                </g>
+                <g>
+                  <path d="M236 190 L276 224 L264 254" fill="none" stroke="var(--bot-spidey-red-dark)" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M236 190 L276 224" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round"/>
+                  <path d="M276 224 L264 254" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+                  <circle cx="262" cy="264" r="10" class="svg-spidey-red"/>
+                </g>
+
+                <!-- Torso Botella PET 3 litros -->
+                <path d="M144 176 L216 176 L238 204 L238 308 L122 308 L122 204 Z" class="svg-pet"/>
+                <!-- Electrónica interna visible -->
+                <rect x="138" y="206" width="40" height="58" rx="4" class="svg-pcb"/>
+                <rect x="188" y="218" width="32" height="44" rx="4" class="svg-battery"/>
+                <rect x="188" y="218" width="32" height="10" rx="2" class="svg-battery-top"/>
+                <!-- Brillo de botella PET -->
+                <rect x="130" y="202" width="10" height="92" rx="5" class="svg-pet-shine"/>
+
+                <!-- Escudo frontal ECOBOT -->
+                <rect x="148" y="232" width="64" height="52" rx="10" class="svg-green"/>
+                <text x="180" y="251" text-anchor="middle" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 11px;">ECOBOT</text>
+                <path d="M174 268 L180 258 L186 268 Z" fill="none" stroke="var(--on-primary)" stroke-width="2.2" stroke-linejoin="round"/>
+
+                <!-- Motor DC con contrapeso de borrador -->
+                <rect x="164" y="294" width="32" height="16" rx="4" class="svg-metal"/>
+                <g id="hero-motor-weight">
+                  <rect x="176" y="296" width="14" height="11" rx="2" class="svg-eraser"/>
+                </g>
+
+                <!-- Base inferior doble -->
+                <rect x="116" y="308" width="128" height="18" rx="6" class="svg-cardboard"/>
+
+                <!-- Tobillos de cartón con franja verde -->
+                <rect x="138" y="326" width="28" height="18" rx="3" class="svg-cardboard-shade"/>
+                <rect x="138" y="332" width="28" height="6" class="svg-green"/>
+                <rect x="194" y="326" width="28" height="18" rx="3" class="svg-cardboard-shade"/>
+                <rect x="194" y="332" width="28" height="6" class="svg-green"/>
+
+                <!-- Pies de tapas grandes azules -->
+                <rect x="128" y="344" width="46" height="18" rx="7" class="svg-blue-cap"/>
+                <rect x="186" y="344" width="46" height="18" rx="7" class="svg-blue-cap"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="hero-status-panel">
+            <div>
+              <span class="chip chip-green" id="hero-state-badge">Estado: En reposo</span>
+            </div>
+            <h3>Así cobra vida en tres fases</h3>
+            <p>Cuando enciendes a ECOBOT con su batería de 9 V, su cerebro Arduino UNO repite este ciclo para saludar, caminar vibrando y descansar sin caerse de la mesa.</p>
+
+            <div class="phase-list">
+              <div class="phase-item" id="phase-card-1">
+                <div>
+                  <div class="phase-title">1. Saludo luminoso</div>
+                  <div class="phase-desc">Sus ojos LED azules parpadean 3 veces</div>
+                </div>
+                <span class="phase-time">1.8 s</span>
+              </div>
+              <div class="phase-item" id="phase-card-2">
+                <div>
+                  <div class="phase-title">2. Baile vibratorio</div>
+                  <div class="phase-desc">Ojos fijos y motor DC girando con su contrapeso</div>
+                </div>
+                <span class="phase-time">3.0 s</span>
+              </div>
+              <div class="phase-item" id="phase-card-3">
+                <div>
+                  <div class="phase-title">3. Pausa de descanso</div>
+                  <div class="phase-desc">El motor se apaga para ahorrar energía</div>
+                </div>
+                <span class="phase-time">2.5 s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="figures-grid reveal">
+          <div class="tile figure">
+            <div class="fig-label">Envase principal rescatado</div>
+            <div class="value">3<span class="unit">litros</span></div>
+            <div class="caption">Botella PET amplia para alojar toda la electrónica</div>
+          </div>
+          <div class="tile figure">
+            <div class="fig-label">Señal del microcontrolador</div>
+            <div class="value">5<span class="unit">voltios</span></div>
+            <div class="caption">Enviados por Arduino UNO desde los pines D8 y D9</div>
+          </div>
+          <div class="tile figure">
+            <div class="fig-label">Energía autónoma</div>
+            <div class="value">9<span class="unit">voltios</span></div>
+            <div class="caption">Funciona sin cables conectado a la computadora</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAND 2: ANATOMÍA Y MATERIALES -->
+    <section class="band alt" id="anatomia">
+      <div class="container">
+        <div class="headline-stack">
+          <span class="eyebrow">Anatomía reciclada</span>
+          <h2>Cada parte tiene una misión especial.</h2>
+          <p class="lede">Toca los círculos numerados o los botones para explorar cómo una botella PET de 3 litros, cartón, tapitas y brazos de juguete se transforman en un robot.</p>
+        </div>
+
+        <div class="anatomy-grid reveal">
+          <div class="tile anatomy-stage">
+            <svg viewBox="0 0 360 370" width="310" height="320" role="img" aria-label="Diagrama interactivo con puntos numerados de ECOBOT.">
+              <!-- Silueta base de ECOBOT -->
+              <rect x="136" y="24" width="6" height="32" rx="3" class="svg-dark"/>
+              <rect x="218" y="24" width="6" height="32" rx="3" class="svg-dark"/>
+              <rect x="128" y="12" width="22" height="14" rx="4" class="svg-green"/>
+              <rect x="210" y="12" width="22" height="14" rx="4" class="svg-green"/>
+              <rect x="88" y="78" width="14" height="36" rx="5" class="svg-green"/>
+              <rect x="258" y="78" width="14" height="36" rx="5" class="svg-green"/>
+              <rect x="102" y="54" width="156" height="94" rx="12" class="svg-cardboard"/>
+              <circle cx="145" cy="100" r="20" class="svg-blue-cap"/>
+              <circle cx="215" cy="100" r="20" class="svg-blue-cap"/>
+              <circle cx="145" cy="100" r="8" class="svg-led on"/>
+              <circle cx="215" cy="100" r="8" class="svg-led on"/>
+              <rect x="148" y="148" width="64" height="18" rx="4" class="svg-cardboard-shade"/>
+
+              <!-- Brazos Spider-Man -->
+              <path d="M124 180 L84 214 L96 244" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M84 214 L96 244" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+              <circle cx="98" cy="254" r="10" class="svg-spidey-red"/>
+
+              <path d="M236 180 L276 214 L264 244" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M276 214 L264 244" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+              <circle cx="262" cy="254" r="10" class="svg-spidey-red"/>
+
+              <path d="M144 166 L216 166 L238 194 L238 298 L122 298 L122 194 Z" class="svg-pet"/>
+              <rect x="148" y="218" width="64" height="48" rx="10" class="svg-green"/>
+              <text x="180" y="246" text-anchor="middle" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 11px;">ECOBOT</text>
+              <rect x="164" y="282" width="32" height="16" rx="4" class="svg-metal"/>
+              <rect x="116" y="298" width="128" height="18" rx="6" class="svg-cardboard"/>
+              <rect x="138" y="316" width="28" height="16" rx="3" class="svg-cardboard-shade"/>
+              <rect x="194" y="316" width="28" height="16" rx="3" class="svg-cardboard-shade"/>
+              <rect x="128" y="332" width="46" height="18" rx="7" class="svg-blue-cap"/>
+              <rect x="186" y="332" width="46" height="18" rx="7" class="svg-blue-cap"/>
+
+              <!-- Puntos interactivos -->
+              <g class="svg-hotspot active" id="hs-1" onclick="selectPart(0)" role="button" tabindex="0" aria-label="Parte 1: Antenas y orejas">
+                <circle cx="236" cy="22" r="15" class="svg-hotspot-ring"/>
+                <text x="236" y="22" class="svg-hotspot-num">1</text>
+              </g>
+              <g class="svg-hotspot" id="hs-2" onclick="selectPart(1)" role="button" tabindex="0" aria-label="Parte 2: Cabeza y ojos LED">
+                <circle cx="180" cy="100" r="15" class="svg-hotspot-ring"/>
+                <text x="180" y="100" class="svg-hotspot-num">2</text>
+              </g>
+              <g class="svg-hotspot" id="hs-3" onclick="selectPart(2)" role="button" tabindex="0" aria-label="Parte 3: Torso de botella PET de 3 litros">
+                <circle cx="180" cy="196" r="15" class="svg-hotspot-ring"/>
+                <text x="180" y="196" class="svg-hotspot-num">3</text>
+              </g>
+              <g class="svg-hotspot" id="hs-4" onclick="selectPart(3)" role="button" tabindex="0" aria-label="Parte 4: Brazos de Spider-Man y escudo">
+                <circle cx="88" cy="218" r="15" class="svg-hotspot-ring"/>
+                <text x="88" y="218" class="svg-hotspot-num">4</text>
+              </g>
+              <g class="svg-hotspot" id="hs-5" onclick="selectPart(4)" role="button" tabindex="0" aria-label="Parte 5: Motor vibrador">
+                <circle cx="180" cy="288" r="15" class="svg-hotspot-ring"/>
+                <text x="180" y="288" class="svg-hotspot-num">5</text>
+              </g>
+              <g class="svg-hotspot" id="hs-6" onclick="selectPart(5)" role="button" tabindex="0" aria-label="Parte 6: Pies de tapas azules">
+                <circle cx="207" cy="340" r="15" class="svg-hotspot-ring"/>
+                <text x="207" y="340" class="svg-hotspot-num">6</text>
+              </g>
+            </svg>
+
+            <div class="hotspot-pills" role="tablist" aria-label="Partes de ECOBOT">
+              <button type="button" class="pill-tab active" id="part-btn-0" aria-selected="true" onclick="selectPart(0)">1. Antenas y orejas</button>
+              <button type="button" class="pill-tab" id="part-btn-1" aria-selected="false" onclick="selectPart(1)">2. Cabeza y ojos</button>
+              <button type="button" class="pill-tab" id="part-btn-2" aria-selected="false" onclick="selectPart(2)">3. Botella PET 3 L</button>
+              <button type="button" class="pill-tab" id="part-btn-3" aria-selected="false" onclick="selectPart(3)">4. Brazos Spider-Man</button>
+              <button type="button" class="pill-tab" id="part-btn-4" aria-selected="false" onclick="selectPart(4)">5. Motor vibrador</button>
+              <button type="button" class="pill-tab" id="part-btn-5" aria-selected="false" onclick="selectPart(5)">6. Pies nivelados</button>
+            </div>
+          </div>
+
+          <div class="tile detail-card" id="part-detail-card">
+            <div>
+              <span class="chip" id="part-category">Reutilización creativa</span>
+              <h3 id="part-title">1. Antenas y orejas verdes</h3>
+              <p id="part-desc">Dos tapas medianas verdes van a los lados de la cabeza como orejas, y dos tapas pequeñas verdes coronan las antenas de 4 cm de alto.</p>
+            </div>
+            <div class="detail-specs">
+              <div class="spec-box">
+                <div class="spec-box-label">Material reciclado</div>
+                <div class="spec-box-val" id="part-material">4 tapas plásticas verdes</div>
+              </div>
+              <div class="spec-box">
+                <div class="spec-box-label">Dato clave</div>
+                <div class="spec-box-val" id="part-measure">Antenas de 4 cm de alto</div>
+              </div>
+            </div>
+            <div class="pro-tip">
+              <strong>Consejo de ingeniería:</strong>
+              <span id="part-tip">El plástico de las tapas es muy liso. Líjalas con lija grano 120 hasta que queden opacas antes de pegarlas, así nunca se soltarán al vibrar.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-grid reveal">
+          <div class="tile bento-card">
+            <span class="chip chip-green">Estructura reciclada</span>
+            <h3>El cuerpo del robot</h3>
+            <ul>
+              <li>1 botella PET limpia y seca de <strong>3 litros</strong></li>
+              <li>2 láminas de cartón corrugado (3 a 4 mm de grosor)</li>
+              <li>8 tapas plásticas y 1 par de brazos reciclados de muñeco Spider-Man</li>
+            </ul>
+          </div>
+          <div class="tile bento-card">
+            <span class="chip">Control y luces</span>
+            <h3>El cerebro y su vista</h3>
+            <ul>
+              <li>1 placa Arduino UNO R3 con cable USB tipo A-B</li>
+              <li>2 diodos LED azules o blancos de alto brillo (5 mm)</li>
+              <li>2 resistencias de 220 Ω o 330 Ω para cuidar los LED</li>
+            </ul>
+          </div>
+          <div class="tile bento-card">
+            <span class="chip chip-orange">Potencia y protección</span>
+            <h3>La fuerza del movimiento</h3>
+            <ul>
+              <li>1 motor eléctrico DC pequeño (3 V a 6 V)</li>
+              <li>1 transistor NPN (2N2222, BC547 o TIP120)</li>
+              <li>1 diodo 1N4007, resistencia 1 kΩ y batería alcalina de 9 V</li>
+            </ul>
+          </div>
+          <div class="tile bento-card">
+            <span class="chip">Con ayuda de un adulto</span>
+            <h3>Herramientas del taller</h3>
+            <ul>
+              <li>Pistola de silicona caliente y pegamento instantáneo</li>
+              <li>Estilete (cúter), tijeras, punzón y lija fina grano 120</li>
+              <li>Regla metálica de 30 cm, marcador y cinta aislante</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAND 3: CONSTRUCCIÓN PASO A PASO -->
+    <section class="band" id="construccion">
+      <div class="container">
+        <div class="headline-stack">
+          <span class="eyebrow">Guía de montaje</span>
+          <h2>Seis pasos para armarlo con precisión.</h2>
+          <p class="lede">Si el cuerpo queda flojo, absorbe la vibración. Sigue esta secuencia para que ECOBOT transmita toda su energía hacia la mesa.</p>
+        </div>
+
+        <div class="stepper-controls" role="tablist" aria-label="Pasos de construcción">
+          <button type="button" class="pill-tab active" id="step-tab-0" aria-selected="true" onclick="selectStep(0)">Paso 1</button>
+          <button type="button" class="pill-tab" id="step-tab-1" aria-selected="false" onclick="selectStep(1)">Paso 2</button>
+          <button type="button" class="pill-tab" id="step-tab-2" aria-selected="false" onclick="selectStep(2)">Paso 3</button>
+          <button type="button" class="pill-tab" id="step-tab-3" aria-selected="false" onclick="selectStep(3)">Paso 4</button>
+          <button type="button" class="pill-tab" id="step-tab-4" aria-selected="false" onclick="selectStep(4)">Paso 5</button>
+          <button type="button" class="pill-tab" id="step-tab-5" aria-selected="false" onclick="selectStep(5)">Paso 6</button>
+        </div>
+
+        <div class="tile step-tile reveal">
+          <div class="step-content">
+            <span class="chip" id="step-badge">Paso 1 de 6</span>
+            <h3 id="step-title">Prepara la botella PET de 3 litros y su puerta trasera</h3>
+            <p id="step-desc">Lava y seca muy bien por dentro una botella PET de 3 litros (su gran espacio interior facilita acomodar el Arduino, la protoboard y la batería). En la espalda, un adulto abre una compuerta de 8.5 cm de ancho para meter la electrónica, dejando 3 cm abajo y 3.5 cm arriba sin cortar. En el hombro va un agujero de 10 mm para los cables.</p>
+            <div class="step-chips" id="step-chips">
+              <span class="chip chip-orange">Con ayuda de un adulto</span>
+              <span class="chip">Botella PET: 3 litros</span>
+              <span class="chip">Compuerta: 8.5 cm</span>
+            </div>
+            <div class="step-nav">
+              <button type="button" class="btn-secondary" id="step-prev" onclick="changeStep(-1)">Anterior</button>
+              <button type="button" class="btn-primary" id="step-next" onclick="changeStep(1)">Siguiente paso</button>
+            </div>
+          </div>
+
+          <div class="step-visual" id="step-svg-container" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAND 4: ELECTRÓNICA Y CIRCUITO -->
+    <section class="band alt" id="circuito">
+      <div class="container">
+        <div class="headline-stack">
+          <span class="eyebrow">Electrónica paso a paso</span>
+          <h2>Por qué Arduino necesita un ayudante.</h2>
+          <p class="lede">Un pin de Arduino solo entrega entre 20 y 40 mA, pero el motor pide entre 150 y 400 mA. Prueba los interruptores para ver cómo el transistor NPN y el diodo protegen el cerebro.</p>
+        </div>
+
+        <div class="tile circuit-grid reveal">
+          <div>
+            <svg viewBox="0 0 560 310" width="100%" height="auto" role="img" aria-label="Diagrama interactivo del circuito de ECOBOT con Arduino UNO, alimentación +5V/Vin, resistencias, LEDs, transistor NPN y diodo 1N4007.">
+              <!-- Arduino UNO -->
+              <rect x="20" y="34" width="136" height="236" rx="12" class="svg-pcb"/>
+              <text x="36" y="64" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 15px;">Arduino UNO</text>
+              <text x="36" y="84" class="svg-white" style="font-family: var(--font-mono); font-size: 11px; opacity: 0.85;">Cerebro 5 V</text>
+
+              <!-- Pines Arduino -->
+              <rect x="132" y="102" width="24" height="22" rx="4" class="svg-dark"/>
+              <text x="124" y="117" text-anchor="end" class="svg-white" style="font-family: var(--font-mono); font-size: 12px;">D8</text>
+
+              <rect x="132" y="168" width="24" height="22" rx="4" class="svg-dark"/>
+              <text x="124" y="183" text-anchor="end" class="svg-white" style="font-family: var(--font-mono); font-size: 12px;">D9</text>
+
+              <rect x="132" y="226" width="24" height="22" rx="4" class="svg-dark"/>
+              <text x="124" y="241" text-anchor="end" class="svg-white" style="font-family: var(--font-mono); font-size: 12px;">GND</text>
+
+              <!-- Riel positivo +5V / Batería hacia Motor -->
+              <rect x="432" y="24" width="84" height="26" rx="6" class="svg-battery-top"/>
+              <text x="474" y="41" text-anchor="middle" class="svg-white" style="font-family: var(--font-mono); font-weight: 600; font-size: 11px;">+5V / Batería</text>
+              <path id="wire-vcc" d="M474 50 L474 106" class="circuit-wire"/>
+
+              <!-- Cables D8 hacia LEDs -->
+              <path id="wire-d8" d="M156 113 L240 113 L240 62 L354 62" class="circuit-wire"/>
+              <rect x="218" y="76" width="46" height="18" rx="4" class="svg-cardboard"/>
+              <text x="241" y="89" text-anchor="middle" class="circuit-sub">220 Ω</text>
+
+              <!-- 2 LEDs azules -->
+              <circle id="circ-led-1" cx="372" cy="50" r="13" class="svg-led"/>
+              <circle id="circ-led-2" cx="372" cy="82" r="13" class="svg-led"/>
+              <text x="392" y="70" class="circuit-label">Ojos LED</text>
+              <path id="wire-led-gnd" d="M372 95 L372 237 L156 237" class="circuit-wire"/>
+
+              <!-- Cables D9 hacia Base del Transistor -->
+              <path id="wire-d9" d="M156 179 L292 179" class="circuit-wire"/>
+              <rect x="200" y="169" width="46" height="20" rx="4" class="svg-cardboard"/>
+              <text x="223" y="183" text-anchor="middle" class="circuit-sub">1 kΩ</text>
+
+              <!-- Transistor NPN -->
+              <circle cx="316" cy="179" r="24" class="svg-dark"/>
+              <text x="316" y="176" text-anchor="middle" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 12px;">NPN</text>
+              <text x="316" y="191" text-anchor="middle" class="svg-white" style="font-family: var(--font-mono); font-size: 9px;">B · C · E</text>
+
+              <!-- Emisor a GND -->
+              <path id="wire-emisor-gnd" d="M316 203 L316 237 L156 237" class="circuit-wire"/>
+
+              <!-- Colector hacia Motor y Diodo -->
+              <path id="wire-motor" d="M316 155 L316 130 L432 130" class="circuit-wire"/>
+
+              <!-- Motor DC -->
+              <rect x="432" y="106" width="84" height="48" rx="10" class="svg-metal"/>
+              <text x="474" y="127" text-anchor="middle" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 12px;">Motor DC</text>
+              <text x="474" y="143" text-anchor="middle" class="svg-white" style="font-family: var(--font-mono); font-size: 10px;">3–6 V</text>
+
+              <!-- Diodo 1N4007 en paralelo al Motor -->
+              <rect x="442" y="176" width="64" height="24" rx="6" class="svg-battery"/>
+              <rect x="492" y="176" width="8" height="24" rx="2" class="svg-white"/>
+              <text x="474" y="215" text-anchor="middle" class="circuit-sub">Diodo 1N4007</text>
+              <path id="wire-diode" d="M442 188 L398 188 L398 130" class="circuit-wire"/>
+              <path id="wire-diode-top" d="M506 188 L532 188 L532 82 L474 82" class="circuit-wire"/>
+            </svg>
+          </div>
+
+          <div class="circuit-controls">
+            <div class="switch-card">
+              <div class="switch-info">
+                <strong>Pin D8 · Ojos LED azules</strong>
+                <span>Pasa por dos resistencias de 220 Ω para no quemar las luces.</span>
+              </div>
+              <button type="button" class="toggle-btn" id="btn-sim-led" aria-pressed="false" onclick="toggleCircuitLed()">Apagado</button>
+            </div>
+
+            <div class="switch-card">
+              <div class="switch-info">
+                <strong>Pin D9 · Motor vibrador</strong>
+                <span>La señal débil (1 kΩ) abre el transistor NPN para unir el motor a GND.</span>
+              </div>
+              <button type="button" class="toggle-btn" id="btn-sim-motor" aria-pressed="false" onclick="toggleCircuitMotor()">Apagado</button>
+            </div>
+
+            <div class="pro-tip" id="circuit-status-msg">
+              <strong>Observa cómo funciona:</strong>
+              <span>Activa el Pin D8 o el Pin D9 para ver cómo viaja la electricidad desde el positivo hacia GND y cómo el diodo 1N4007 protege al circuito al apagar el motor.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile table-tile reveal">
+          <h3>Tabla maestra de conexiones (Pinout oficial)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Subsistema</th>
+                <th>Componente</th>
+                <th>Conexión en Arduino / Protoboard</th>
+                <th>¿Para qué sirve?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ojos LED (Izq y Der)</td>
+                <td>Ánodo (+, pata larga)</td>
+                <td>Pin Digital <span class="mono-badge">D8</span> vía resistencia <span class="mono-badge">220 Ω</span></td>
+                <td>Ilumina los dos ojos azules al mismo tiempo.</td>
+              </tr>
+              <tr>
+                <td>Ojos LED (Izq y Der)</td>
+                <td>Cátodo (−, pata corta)</td>
+                <td>Bus negativo <span class="mono-badge">GND</span> de protoboard</td>
+                <td>Completa el camino de regreso a tierra.</td>
+              </tr>
+              <tr>
+                <td>Control del Motor</td>
+                <td>Base (B) del Transistor NPN</td>
+                <td>Pin Digital <span class="mono-badge">D9</span> vía resistencia <span class="mono-badge">1 kΩ</span></td>
+                <td>Actúa como botón electrónico seguro para el motor.</td>
+              </tr>
+              <tr>
+                <td>Potencia del Motor</td>
+                <td>Positivo (+), Colector (C) y Emisor (E)</td>
+                <td>Positivo del motor a <span class="mono-badge">+5V / Batería</span>; negativo al Colector (C) y Emisor (E) a <span class="mono-badge">GND</span></td>
+                <td>Cierra el circuito de fuerza cuando D9 envía 5 V.</td>
+              </tr>
+              <tr>
+                <td>Escudo Antirrebote</td>
+                <td>Diodo <span class="mono-badge">1N4007</span></td>
+                <td>En paralelo al motor (franja blanca hacia el positivo <span class="mono-badge">+</span>)</td>
+                <td>Absorbe picos de voltaje inverso al apagar el motor.</td>
+              </tr>
+              <tr>
+                <td>Energía Autónoma</td>
+                <td>Batería alcalina de <span class="mono-badge">9 V</span></td>
+                <td>Conector Jack negro o pines <span class="mono-badge">VIN / GND</span></td>
+                <td>Permite exhibir a ECOBOT sin cables USB.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAND 5: CÓDIGO INTERACTIVO -->
+    <section class="band" id="codigo">
+      <div class="container">
+        <div class="headline-stack">
+          <span class="eyebrow">Programación en Arduino IDE</span>
+          <h2>Cambia las órdenes de ECOBOT.</h2>
+          <p class="lede">Toca las partes del código en C++ para entender qué significa cada línea, ajusta los tiempos y copia o descarga el archivo listo para Arduino IDE.</p>
+        </div>
+
+        <div class="code-grid reveal">
+          <div class="code-window">
+            <div class="code-header">
+              <span class="code-filename">ecobot_robotcasc_2026.ino</span>
+              <div class="code-actions">
+                <button type="button" class="code-action-btn" id="btn-copy-code" onclick="copyArduinoCode()">Copiar código</button>
+                <button type="button" class="code-action-btn" onclick="downloadArduinoCode()">Descargar .ino</button>
+              </div>
+            </div>
+
+            <div class="code-tabs" role="tablist" aria-label="Partes del programa">
+              <button type="button" class="code-tab active" id="ctab-0" aria-selected="true" onclick="selectCodeSection(0)">setup()</button>
+              <button type="button" class="code-tab" id="ctab-1" aria-selected="false" onclick="selectCodeSection(1)">Fase 1: Saludo</button>
+              <button type="button" class="code-tab" id="ctab-2" aria-selected="false" onclick="selectCodeSection(2)">Fase 2: Vibrar</button>
+              <button type="button" class="code-tab" id="ctab-3" aria-selected="false" onclick="selectCodeSection(3)">Fase 3: Pausa</button>
+            </div>
+
+            <pre class="code-block" id="live-code-block"></pre>
+
+            <div class="code-explain" id="code-explain-box">
+              <strong>setup() — La preparación inicial:</strong> Se ejecuta una sola vez al encender a ECOBOT. Le dice al Arduino que los pines 8 y 9 van a enviar electricidad hacia afuera (OUTPUT) y arranca todo apagado por seguridad.
+            </div>
+          </div>
+
+          <div class="tile sliders-panel">
+            <div>
+              <h3 style="font-family: var(--font-headline); font-size: 1.375rem; font-weight: 700; margin: 0 0 var(--space-xs);">Laboratorio de tiempos</h3>
+              <p style="color: var(--on-surface-variant); margin: 0 0 var(--space-md); font-size: 0.9375rem;">Ajusta los números del bucle <span class="mono-badge">loop()</span> y observa la vista previa en vivo.</p>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="slider-blinks">Parpadeos de saludo (Fase 1)</label>
+                  <span class="control-val" id="val-blinks">3 veces</span>
+                </div>
+                <input type="range" id="slider-blinks" min="1" max="5" step="1" value="3" oninput="updateCodeParams()">
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="slider-vibe">Tiempo de vibración (Fase 2)</label>
+                  <span class="control-val" id="val-vibe">3000 ms (3.0 s)</span>
+                </div>
+                <input type="range" id="slider-vibe" min="1000" max="5000" step="500" value="3000" oninput="updateCodeParams()">
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="slider-rest">Tiempo de descanso (Fase 3)</label>
+                  <span class="control-val" id="val-rest">2500 ms (2.5 s)</span>
+                </div>
+                <input type="range" id="slider-rest" min="1000" max="4000" step="500" value="2500" oninput="updateCodeParams()">
+              </div>
+            </div>
+
+            <div class="mini-sim-bar">
+              <div>
+                <div style="font-weight: 600; font-size: 0.9375rem;" id="mini-sim-label">Listo para probar tu código</div>
+                <div style="font-size: var(--label-size); color: var(--on-surface-variant);" id="mini-sim-sub">Presiona Probar para ver tus tiempos en acción</div>
+              </div>
+              <div class="mini-led-dots" aria-hidden="true">
+                <span class="mini-led-dot" id="mini-dot-1"></span>
+                <span class="mini-led-dot" id="mini-dot-2"></span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn-primary" id="btn-run-custom" onclick="runCustomCodeSim()">Probar este código</button>
+              <button type="button" class="btn-secondary" onclick="resetCodeParams()">Valores originales</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAND 6: PRUEBAS, SOLUCIONES, GUION Y MINI DESAFÍO -->
+    <section class="band alt" id="pruebas">
+      <div class="container">
+        <div class="headline-stack">
+          <span class="eyebrow">Antes de la exposición</span>
+          <h2>Cuatro pruebas y listo para el jurado.</h2>
+          <p class="lede">Marca cada verificación técnica en orden estricto antes de cerrar la compuerta trasera de la botella de 3 litros y ensaya la presentación oral de 90 segundos.</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); flex-wrap: wrap; gap: var(--space-sm);">
+          <strong style="font-family: var(--font-headline); font-size: 1.25rem;">Protocolo de pruebas técnicas</strong>
+          <span class="chip chip-green" id="checklist-progress">0 de 4 completadas</span>
+        </div>
+
+        <div class="checklist-grid reveal">
+          <button type="button" class="check-card" id="chk-0" aria-pressed="false" onclick="toggleChecklist(0)">
+            <span class="check-box" aria-hidden="true">1</span>
+            <div>
+              <strong>1. Prueba de iluminación</strong>
+              <span>Conecta el cable USB y revisa que ambos ojos LED azules parpadeen 3 veces con igual fuerza. Si uno no enciende, invierte sus patas.</span>
+            </div>
+          </button>
+          <button type="button" class="check-card" id="chk-1" aria-pressed="false" onclick="toggleChecklist(1)">
+            <span class="check-box" aria-hidden="true">2</span>
+            <div>
+              <strong>2. Prueba de motor en vacío</strong>
+              <span>Sostén a ECOBOT en el aire y espera la Fase 2. El motor debe vibrar con fuerza sin chocar con las paredes de la botella de 3 L ni con los cables.</span>
+            </div>
+          </button>
+          <button type="button" class="check-card" id="chk-2" aria-pressed="false" onclick="toggleChecklist(2)">
+            <span class="check-box" aria-hidden="true">3</span>
+            <div>
+              <strong>3. Prueba de desplazamiento</strong>
+              <span>Ponlo sobre una mesa lisa. Debe avanzar vibrando sin volcarse; si se inclina, centra la batería de 9 V en el fondo como equilibrio.</span>
+            </div>
+          </button>
+          <button type="button" class="check-card" id="chk-3" aria-pressed="false" onclick="toggleChecklist(3)">
+            <span class="check-box" aria-hidden="true">4</span>
+            <div>
+              <strong>4. Prueba de autonomía</strong>
+              <span>Desconecta el USB de la computadora y usa solo una batería alcalina de 9 V nueva. Lleva otra de repuesto para la feria.</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="bento-grid reveal">
+          <div class="tile bento-card">
+            <span class="chip chip-orange">Solución rápida</span>
+            <h3>Ojos parpadean, pero no vibra</h3>
+            <p style="color: var(--on-surface-variant); margin: 0;">Revisa el cable del Pin D9 hacia la base del transistor, confirma que los negativos (GND) estén unidos y verifica que la batería de 9 V sea nueva.</p>
+          </div>
+          <div class="tile bento-card">
+            <span class="chip chip-orange">Solución rápida</span>
+            <h3>Arduino se reinicia al arrancar</h3>
+            <p style="color: var(--on-surface-variant); margin: 0;">Eso pasa cuando la batería está gastada y su voltaje cae de golpe al encender el motor. Cambia la pila de 9 V por una alcalina nueva.</p>
+          </div>
+          <div class="tile bento-card">
+            <span class="chip chip-orange">Solución rápida</span>
+            <h3>Suena, pero casi no avanza</h3>
+            <p style="color: var(--on-surface-variant); margin: 0;">Asegúrate de pegar el motor directamente al cartón de la base inferior (si queda suelto vibra en el aire) y agranda un poquito el contrapeso.</p>
+          </div>
+        </div>
+
+        <!-- Guion Oral -->
+        <div class="tile speech-tile reveal">
+          <div class="speech-header">
+            <div>
+              <span class="chip">Exposición oral · 90 segundos</span>
+              <h3 style="font-family: var(--font-headline); font-size: 1.5rem; font-weight: 700; margin: var(--space-xs) 0 0;">Guion de Luz Graciela ante el jurado</h3>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <span class="chip chip-green" id="speech-timer-badge">Listo para ensayar</span>
+              <button type="button" class="btn-primary" id="btn-speech-practice" onclick="toggleSpeechPractice()">Practicar paso a paso</button>
+            </div>
+          </div>
+
+          <div class="speech-paragraphs">
+            <div class="speech-para" id="sp-0">“¡Buenos días, queridos jurados y compañeros! Mi nombre es <strong>Luz Graciela Rivas Salas</strong>, del curso <strong>3ro. A – Tarde</strong>, y hoy les presento mi proyecto llamado <strong>ECOBOT: El pequeño guardián del planeta</strong>.”</div>
+            <div class="speech-para" id="sp-1">“Construí a ECOBOT porque quería demostrar que los plásticos y juguetes que ya no usamos pueden convertirse en tecnología útil y divertida. Su cuerpo está hecho con una botella PET de tres litros, su cabeza con cartón reciclado, sus brazos con piezas recicladas de un muñeco de Spider-Man y sus ojos, orejas y pies con tapitas plásticas.”</div>
+            <div class="speech-para" id="sp-2">“Por dentro, ECOBOT tiene un cerebro electrónico llamado <strong>Arduino UNO</strong>, que programamos desde la computadora. Cuando lo encendemos, el programa le da órdenes para que primero parpadeen sus ojos LED azules y después encienda un pequeño motor vibrador durante tres segundos, haciendo que ECOBOT se mueva sobre la mesa, y luego se apague para descansar.”</div>
+            <div class="speech-para" id="sp-3">“Con este proyecto aprendí electrónica, programación y, lo más importante, que cuidar nuestro planeta está en nuestras manos. ¡Muchas gracias!”</div>
+          </div>
+        </div>
+
+        <!-- Mini Quiz -->
+        <div class="quiz-grid reveal">
+          <div class="tile quiz-card">
+            <h4>1. ¿Por qué no conectamos el motor directo al pin D9 de Arduino?</h4>
+            <div class="quiz-options">
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 0, false)">Porque el motor es demasiado silencioso</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 0, true)">Porque el motor pide mucha corriente (150–400 mA) y quemaría el pin</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 0, false)">Porque solo funciona con botellas verdes</button>
+            </div>
+            <div class="quiz-feedback" id="qfb-0"></div>
+          </div>
+
+          <div class="tile quiz-card">
+            <h4>2. ¿Qué truco evita que las tapitas y los brazos de Spider-Man se despeguen al vibrar?</h4>
+            <div class="quiz-options">
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 1, true)">Lijar las zonas de pegado con lija fina grano 120 hasta que pierdan el brillo</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 1, false)">Mojarlas con agua antes de poner la silicona</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 1, false)">Dejar la etiqueta puesta en la botella</button>
+            </div>
+            <div class="quiz-feedback" id="qfb-1"></div>
+          </div>
+
+          <div class="tile quiz-card">
+            <h4>3. ¿Qué función cumple el diodo 1N4007 junto al motor?</h4>
+            <div class="quiz-options">
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 2, false)">Hace que los ojos brillen de color rojo</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 2, true)">Protege al Arduino contra picos de voltaje inverso al apagar el motor</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 2, false)">Reemplaza a la batería de 9 V</button>
+            </div>
+            <div class="quiz-feedback" id="qfb-2"></div>
+          </div>
+
+          <div class="tile quiz-card">
+            <h4>4. En Arduino IDE, ¿cuánto tiempo dura la instrucción delay(3000)?</h4>
+            <div class="quiz-options">
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 3, false)">3000 minutos seguidos</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 3, true)">3 segundos (3000 milisegundos)</button>
+              <button type="button" class="quiz-opt" onclick="answerQuiz(this, 3, false)">Media hora exacta</button>
+            </div>
+            <div class="quiz-feedback" id="qfb-3"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>ECOBOT – El pequeño guardián del planeta</strong> · I Olimpiada Interna de Robótica Educativa – ROBOTCASC 2026 (“Innovando con Ingenio y Propósito”)</p>
+      <p>Colegio Adventista Santa Cruz (CASC) · Expositora: Luz Graciela Rivas Salas (3ro. A – Tarde) · Tutora: Prof. Ing. Rosa Vianka Chura Zegarra</p>
+      <p>Elaborado a partir del Manual Técnico Completo – Proyecto ECOBOT.</p>
+    </div>
+  </footer>
+
+  <script>
+    // --- Data stores ---
+    const PARTS_DATA = [
+      {
+        category: `Reutilización creativa`,
+        title: `1. Antenas y orejas verdes`,
+        desc: `Dos tapas medianas verdes van a los lados de la cabeza como orejas, y dos tapas pequeñas verdes coronan las antenas de 4 cm hechas con resortes o palitos forrados.`,
+        material: `4 tapas plásticas verdes`,
+        measure: `Antenas de 4 cm de alto`,
+        tip: `El plástico de las tapas es muy liso. Líjalas con lija grano 120 hasta que queden opacas y sin polvo antes de pegarlas.`
+      },
+      {
+        category: `Señalización luminosa`,
+        title: `2. Cabeza cúbica y ojos LED azules`,
+        desc: `Una caja de cartón corrugado de 12 cm de ancho, 9.5 cm de alto y 9 cm de profundidad guarda dos LED azules de 5 mm insertados dentro de tapas medianas azules.`,
+        material: `Cartón 3–4 mm + 2 tapas azules + 2 LED`,
+        measure: `Caja de 12 × 9.5 × 9 cm`,
+        tip: `Une las patas cortas (cátodo −) entre sí y conecta cada pata larga (ánodo +) a una resistencia de 220 Ω o 330 Ω aislada con cinta.`
+      },
+      {
+        category: `Chasis central`,
+        title: `3. Torso de botella PET de 3 litros`,
+        desc: `Una botella transparente de 3 litros limpia y completamente seca ofrece amplio espacio interno para alojar la placa Arduino UNO, la protoboard de 400 puntos y la batería de 9 V.`,
+        material: `1 botella PET de 3 litros`,
+        measure: `Compuerta trasera de 8.5 cm`,
+        tip: `Refuerza el cuello con un collarín de cartón de 2.5 cm de ancho y perfora arriba un túnel de 10 mm para subir los cables hacia la cabeza.`
+      },
+      {
+        category: `Reutilización y postura`,
+        title: `4. Brazos de Spider-Man y escudo frontal`,
+        desc: `Un par de brazos reciclados de un muñeco de Spider-Man se fijan a ambos lados de la botella PET de 3 litros, acompañados por el escudo verde de reciclaje en el pecho.`,
+        material: `Brazos reciclados de Spider-Man + foami verde`,
+        measure: `Fijados a media altura del torso`,
+        tip: `Lija tanto la base del hombro de los brazos de Spider-Man como el punto exacto de la botella PET de 3 L antes de pegar con silicona caliente.`
+      },
+      {
+        category: `Locomoción mecánica`,
+        title: `5. Motor DC con contrapeso excéntrico`,
+        desc: `Un pequeño motor de 3 V a 6 V hace girar un trozo de borrador escolar clavado fuera del centro. Ese giro desequilibrado produce la vibración que mueve a ECOBOT.`,
+        material: `Motor DC + borrador escolar`,
+        measure: `Borrador de 1.2 × 0.8 × 0.6 cm`,
+        tip: `Pega el cuerpo del motor directo al disco doble de la base con silicona caliente y verifica que el borrador gire libremente sin rozar cables.`
+      },
+      {
+        category: `Estabilidad total`,
+        title: `6. Pies de tapas grandes y tobillos`,
+        desc: `Dos tapas azules grandes de bidón sirven de pies, unidas a una base doble de 11 cm mediante dos cilindros de cartón con franja verde que actúan como tobillos.`,
+        material: `2 tapas azules grandes + cartón doble`,
+        measure: `Base de 11 cm · Tobillos 1.8 cm alto`,
+        tip: `Apoya los pies en una mesa plana al pegarlos para confirmar que ambos tocan el suelo al mismo tiempo sin cojear y soporten bien la botella de 3 litros.`
+      }
+    ];
+
+    const STEPS_DATA = [
+      {
+        badge: `Paso 1 de 6`,
+        title: `Prepara la botella PET de 3 litros y su puerta trasera`,
+        desc: `Lava y seca muy bien por dentro una botella PET de 3 litros (la humedad daña los circuitos). En la espalda, un adulto abre una ventana de 8.5 cm de ancho dejando 3 cm abajo y 3.5 cm arriba sin cortar. En el hombro va un agujero de 10 mm para subir los cables.`,
+        chips: [`Con ayuda de un adulto`, `Botella PET: 3 litros`, `Ventana: 8.5 cm`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <path d="M92 22 L148 22 L170 52 L170 178 L70 178 L70 52 Z" class="svg-pet"/>
+          <rect x="86" y="66" width="68" height="84" rx="6" fill="none" stroke="var(--secondary)" stroke-width="2.5" stroke-dasharray="5 4"/>
+          <circle cx="150" cy="40" r="7" fill="var(--primary)"/>
+          <text x="120" y="106" text-anchor="middle" style="font-family: var(--font-mono); font-size: 11px; fill: var(--secondary); font-weight: 600;">3 Litros</text>
+          <text x="120" y="122" text-anchor="middle" style="font-family: var(--font-mono); font-size: 10px; fill: var(--secondary); font-weight: 600;">8.5 cm</text>
+          <text x="180" y="44" style="font-family: var(--font-mono); font-size: 10px; fill: var(--primary); font-weight: 600;">10 mm</text>
+        </svg>`
+      },
+      {
+        badge: `Paso 2 de 6`,
+        title: `Construye el collarín y la base reforzada`,
+        desc: `Una botella de 3 litros necesita buena rigidez para transmitir vibraciones. Enrolla una tira de cartón de 2.5 cm de ancho alrededor del cuello para crear el collarín superior. Abajo, arma una copa con un disco de cartón doble de 11 cm y una tira de 2.8 cm de alto para encajar la base.`,
+        chips: [`Collarín: 2.5 cm ancho`, `Disco doble: 11 cm`, `Borde copa: 2.8 cm`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <rect x="92" y="24" width="56" height="18" rx="4" class="svg-cardboard-shade"/>
+          <path d="M92 42 L148 42 L170 70 L170 146 L70 146 L70 70 Z" class="svg-pet"/>
+          <rect x="62" y="142" width="116" height="26" rx="6" class="svg-cardboard"/>
+          <text x="120" y="159" text-anchor="middle" style="font-family: var(--font-mono); font-size: 11px; fill: var(--on-surface); font-weight: 600;">Base 11 cm (PET 3 L)</text>
+        </svg>`
+      },
+      {
+        badge: `Paso 3 de 6`,
+        title: `Lija las tapas y nivela los pies`,
+        desc: `Lija con grano 120 la cara plana de las 8 tapas hasta que pierdan el brillo y limpia el polvillo. Coloca las 2 tapas azules grandes boca abajo separadas por 8 mm, pega los cilindros de tobillo (1.8 × 4 cm) y únelos al disco base de 11 cm sin que cojee.`,
+        chips: [`Lija grano 120`, `Separación pies: 8 mm`, `Tobillos: 1.8 × 4 cm`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <rect x="46" y="54" width="148" height="20" rx="6" class="svg-cardboard"/>
+          <rect x="72" y="74" width="32" height="24" rx="3" class="svg-cardboard-shade"/>
+          <rect x="72" y="83" width="32" height="6" class="svg-green"/>
+          <rect x="136" y="74" width="32" height="24" rx="3" class="svg-cardboard-shade"/>
+          <rect x="136" y="83" width="32" height="6" class="svg-green"/>
+          <rect x="62" y="98" width="52" height="22" rx="7" class="svg-blue-cap"/>
+          <rect x="126" y="98" width="52" height="22" rx="7" class="svg-blue-cap"/>
+          <line x1="34" y1="122" x2="206" y2="122" stroke="var(--positive)" stroke-width="3" stroke-linecap="round"/>
+          <text x="120" y="148" text-anchor="middle" style="font-family: var(--font-mono); font-size: 11px; fill: var(--positive); font-weight: 600;">Nivelado sobre mesa plana</text>
+        </svg>`
+      },
+      {
+        badge: `Paso 4 de 6`,
+        title: `Arma la cabeza cúbica, ojos LED y antenas`,
+        desc: `Corta una plantilla de cartón para armar una caja proporcionada a la botella de 3 litros (12 × 9.5 × 9 cm). Perfora 5 mm al centro de las 2 tapas azules medianas, mete los LED desde adentro, une sus patas cortas (−) y pon una resistencia de 220 Ω en cada pata larga (+). Suma orejas y antenas de 4 cm.`,
+        chips: [`Cabeza: 12 × 9.5 × 9 cm`, `LED 5 mm + 220 Ω`, `Antenas: 4 cm`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <rect x="72" y="24" width="6" height="24" rx="3" class="svg-dark"/>
+          <rect x="162" y="24" width="6" height="24" rx="3" class="svg-dark"/>
+          <rect x="65" y="14" width="20" height="12" rx="4" class="svg-green"/>
+          <rect x="155" y="14" width="20" height="12" rx="4" class="svg-green"/>
+          <rect x="34" y="74" width="12" height="32" rx="4" class="svg-green"/>
+          <rect x="194" y="74" width="12" height="32" rx="4" class="svg-green"/>
+          <rect x="46" y="48" width="148" height="92" rx="10" class="svg-cardboard"/>
+          <circle cx="88" cy="94" r="20" class="svg-blue-cap"/>
+          <circle cx="152" cy="94" r="20" class="svg-blue-cap"/>
+          <circle cx="88" cy="94" r="8" class="svg-led on"/>
+          <circle cx="152" cy="94" r="8" class="svg-led on"/>
+          <text x="120" y="166" text-anchor="middle" style="font-family: var(--font-mono); font-size: 11px; fill: var(--on-surface-variant); font-weight: 600;">12 × 9.5 × 9 cm</text>
+        </svg>`
+      },
+      {
+        badge: `Paso 5 de 6`,
+        title: `Fija los brazos reciclados de Spider-Man y el escudo`,
+        desc: `Lija ligeramente las zonas de unión de los brazos reciclados del muñeco de Spider-Man y los costados de la botella PET de 3 litros. Pégalos simétricamente a media altura con silicona caliente (si tienen eje articulado, coloca un refuerzo interno de cartón) y pega al frente el escudo verde con el nombre ECOBOT.`,
+        chips: [`Brazos de Spider-Man`, `Lijado previo en PET 3 L`, `Escudo frontal ECOBOT`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <path d="M80 48 L42 84 L54 116" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M42 84 L54 116" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+          <circle cx="56" cy="124" r="9" class="svg-spidey-red"/>
+
+          <path d="M160 48 L198 84 L186 116" fill="none" stroke="var(--bot-spidey-red)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M198 84 L186 116" fill="none" stroke="var(--bot-blue-cap)" stroke-width="14" stroke-linecap="round"/>
+          <circle cx="184" cy="124" r="9" class="svg-spidey-red"/>
+
+          <rect x="80" y="38" width="80" height="104" rx="14" class="svg-pet"/>
+          <rect x="92" y="64" width="56" height="44" rx="8" class="svg-green"/>
+          <text x="120" y="90" text-anchor="middle" class="svg-white" style="font-family: var(--font-headline); font-weight: 700; font-size: 11px;">ECOBOT</text>
+        </svg>`
+      },
+      {
+        badge: `Paso 6 de 6`,
+        title: `Crea el motor vibrador con borrador`,
+        desc: `Corta un trocito de borrador escolar de 1.2 × 0.8 × 0.6 cm y clava el eje del motor fuera del centro con una gota de pegamento. Pega el motor con silicona caliente sobre el disco de la base dentro de la botella de 3 litros para que toda la vibración llegue a los pies.`,
+        chips: [`Borrador: 1.2 × 0.8 × 0.6 cm`, `Pegado al disco base`, `Giro libre sin roces`],
+        svg: `<svg viewBox="0 0 240 200" width="220" height="184" aria-hidden="true">
+          <rect x="44" y="130" width="152" height="18" rx="5" class="svg-cardboard"/>
+          <rect x="76" y="94" width="66" height="36" rx="6" class="svg-metal"/>
+          <rect x="142" y="108" width="20" height="8" rx="2" class="svg-dark"/>
+          <rect x="154" y="84" width="18" height="28" rx="3" class="svg-eraser"/>
+          <circle cx="163" cy="112" r="3" class="svg-dark"/>
+          <text x="120" y="62" text-anchor="middle" style="font-family: var(--font-mono); font-size: 11px; fill: var(--secondary); font-weight: 600;">Eje fuera del centro = Vibración</text>
+        </svg>`
+      }
+    ];
+
+    const CODE_EXPLAINS = [
+      `<strong>setup() — La preparación inicial:</strong> Se ejecuta una sola vez al encender a ECOBOT. Configura los pines 8 y 9 como salida (OUTPUT) y apaga todo al principio por seguridad.`,
+      `<strong>Fase 1 — Saludo luminoso:</strong> El bucle for repite las veces elegidas el encendido y apagado de los ojos LED azules con pausas de 300 milisegundos.`,
+      `<strong>Fase 2 — Activación de movimiento:</strong> Deja los ojos encendidos (HIGH) y manda 5 V por el pin 9 hacia el transistor para hacer vibrar el motor durante los milisegundos elegidos.`,
+      `<strong>Fase 3 — Pausa de descanso:</strong> Corta la energía en el pin 9 (LOW) para detener el motor durante los milisegundos elegidos antes de volver a empezar.`
+    ];
+
+    const QUIZ_FEEDBACK = [
+      {
+        ok: `¡Exacto! El pin de Arduino da 20–40 mA y el motor pide 150–400 mA. El transistor NPN actúa como un interruptor seguro.`,
+        bad: `Intenta otra vez: un pin de Arduino tiene poca corriente (20–40 mA) comparada con lo que exige el motor al arrancar.`
+      },
+      {
+        ok: `¡Correcto! Al lijar con grano 120 creamos rayitas microscópicas para que la silicona se agarre con fuerza tanto a las tapas como a la botella de 3 litros.`,
+        bad: `Pista: las tapas y el plástico de los juguetes son muy lisos. ¿Cómo quitamos ese brillo antes de pegar?`
+      },
+      {
+        ok: `¡Muy bien! El diodo 1N4007 absorbe los picos de electricidad inversa cuando el motor se detiene, cuidando al Arduino.`,
+        bad: `Casi: el diodo 1N4007 es un guardaespaldas electrónico conectado en paralelo al motor.`
+      },
+      {
+        ok: `¡Genial! Como 1 segundo tiene 1000 milisegundos, delay(3000) equivale exactamente a 3 segundos.`,
+        bad: `Recuerda: en Arduino el tiempo se escribe en milisegundos (1000 ms = 1 segundo).`
+      }
+    ];
+
+    // --- State variables ---
+    let heroRunning = false;
+    let heroTimer = null;
+    let currentStep = 0;
+    let simLedOn = false;
+    let simMotorOn = false;
+    let activeCodeTab = 0;
+    let codeSimRunning = false;
+    let codeSimTimer = null;
+    let speechRunning = false;
+    let speechTimer = null;
+    const checklistState = [false, false, false, false];
+
+    // --- Hero Cycle Simulation ---
+    function clearHeroHighlight() {
+      for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById(`phase-card-${i}`);
+        if (card) card.classList.remove(`active`);
+      }
+      const l1 = document.getElementById(`hero-led-left`);
+      const l2 = document.getElementById(`hero-led-right`);
+      const body = document.getElementById(`hero-bot-body`);
+      const weight = document.getElementById(`hero-motor-weight`);
+      if (l1) l1.classList.remove(`on`);
+      if (l2) l2.classList.remove(`on`);
+      if (body) body.classList.remove(`ecobot-vibrating`);
+      if (weight) weight.classList.remove(`motor-spinning`);
+    }
+
+    function setHeroLeds(on) {
+      const l1 = document.getElementById(`hero-led-left`);
+      const l2 = document.getElementById(`hero-led-right`);
+      if (l1) l1.classList.toggle(`on`, on);
+      if (l2) l2.classList.toggle(`on`, on);
+    }
+
+    function setHeroPhase(phaseNum, text) {
+      for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById(`phase-card-${i}`);
+        if (card) card.classList.toggle(`active`, i === phaseNum);
+      }
+      const badge = document.getElementById(`hero-state-badge`);
+      if (badge) badge.textContent = text;
+    }
+
+    function runHeroSequence() {
+      if (!heroRunning) return;
+      clearHeroHighlight();
+      setHeroPhase(1, `Fase 1: Saludo luminoso (parpadeando)`);
+
+      let step = 0;
+      function nextBlink() {
+        if (!heroRunning) return;
+        if (step < 6) {
+          setHeroLeds(step % 2 === 0);
+          step++;
+          heroTimer = setTimeout(nextBlink, 300);
+        } else {
+          setHeroLeds(true);
+          setHeroPhase(2, `Fase 2: Vibrando y avanzando (3.0 s)`);
+          const body = document.getElementById(`hero-bot-body`);
+          const weight = document.getElementById(`hero-motor-weight`);
+          if (body) body.classList.add(`ecobot-vibrating`);
+          if (weight) weight.classList.add(`motor-spinning`);
+
+          heroTimer = setTimeout(function() {
+            if (!heroRunning) return;
+            if (body) body.classList.remove(`ecobot-vibrating`);
+            if (weight) weight.classList.remove(`motor-spinning`);
+            setHeroPhase(3, `Fase 3: Descansando (2.5 s)`);
+
+            heroTimer = setTimeout(function() {
+              if (!heroRunning) return;
+              runHeroSequence();
+            }, 2500);
+          }, 3000);
+        }
+      }
+      nextBlink();
+    }
+
+    function toggleHeroCycle() {
+      const btn = document.getElementById(`hero-toggle-btn`);
+      const badge = document.getElementById(`hero-state-badge`);
+      if (heroRunning) {
+        heroRunning = false;
+        clearTimeout(heroTimer);
+        clearHeroHighlight();
+        if (btn) btn.textContent = `Encender a ECOBOT`;
+        if (badge) badge.textContent = `Estado: En reposo`;
+      } else {
+        heroRunning = true;
+        if (btn) btn.textContent = `Apagar a ECOBOT`;
+        runHeroSequence();
+      }
+    }
+
+    // --- Anatomy Explorer ---
+    function selectPart(index) {
+      const data = PARTS_DATA[index];
+      if (!data) return;
+
+      for (let i = 0; i < PARTS_DATA.length; i++) {
+        const hs = document.getElementById(`hs-${i + 1}`);
+        const pb = document.getElementById(`part-btn-${i}`);
+        if (hs) hs.classList.toggle(`active`, i === index);
+        if (pb) {
+          pb.classList.toggle(`active`, i === index);
+          pb.setAttribute(`aria-selected`, i === index ? `true` : `false`);
+        }
+      }
+
+      const cat = document.getElementById(`part-category`);
+      const title = document.getElementById(`part-title`);
+      const desc = document.getElementById(`part-desc`);
+      const mat = document.getElementById(`part-material`);
+      const meas = document.getElementById(`part-measure`);
+      const tip = document.getElementById(`part-tip`);
+
+      if (cat) cat.textContent = data.category;
+      if (title) title.textContent = data.title;
+      if (desc) desc.textContent = data.desc;
+      if (mat) mat.textContent = data.material;
+      if (meas) meas.textContent = data.measure;
+      if (tip) tip.textContent = data.tip;
+    }
+
+    // --- Step-by-Step Builder ---
+    function selectStep(index) {
+      if (index < 0 || index >= STEPS_DATA.length) return;
+      currentStep = index;
+      const step = STEPS_DATA[index];
+
+      for (let i = 0; i < STEPS_DATA.length; i++) {
+        const tab = document.getElementById(`step-tab-${i}`);
+        if (tab) {
+          tab.classList.toggle(`active`, i === index);
+          tab.setAttribute(`aria-selected`, i === index ? `true` : `false`);
+        }
+      }
+
+      const badge = document.getElementById(`step-badge`);
+      const title = document.getElementById(`step-title`);
+      const desc = document.getElementById(`step-desc`);
+      const chips = document.getElementById(`step-chips`);
+      const svgBox = document.getElementById(`step-svg-container`);
+      const prevBtn = document.getElementById(`step-prev`);
+      const nextBtn = document.getElementById(`step-next`);
+
+      if (badge) badge.textContent = step.badge;
+      if (title) title.textContent = step.title;
+      if (desc) desc.textContent = step.desc;
+      if (chips) {
+        chips.innerHTML = step.chips.map(function(c, idx) {
+          const extra = idx === 0 && index === 0 ? ` chip-orange` : ``;
+          return `<span class="chip${extra}">${c}</span>`;
+        }).join(``);
+      }
+      if (svgBox) svgBox.innerHTML = step.svg;
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.textContent = index === STEPS_DATA.length - 1 ? `Volver al Paso 1` : `Siguiente paso`;
+    }
+
+    function changeStep(delta) {
+      if (currentStep === STEPS_DATA.length - 1 && delta > 0) {
+        selectStep(0);
+        return;
+      }
+      const next = Math.max(0, Math.min(STEPS_DATA.length - 1, currentStep + delta));
+      selectStep(next);
+    }
+
+    // --- Circuit Simulator ---
+    function updateCircuitVisuals() {
+      const btnLed = document.getElementById(`btn-sim-led`);
+      const btnMotor = document.getElementById(`btn-sim-motor`);
+      const wD8 = document.getElementById(`wire-d8`);
+      const wLedGnd = document.getElementById(`wire-led-gnd`);
+      const led1 = document.getElementById(`circ-led-1`);
+      const led2 = document.getElementById(`circ-led-2`);
+      const wD9 = document.getElementById(`wire-d9`);
+      const wVcc = document.getElementById(`wire-vcc`);
+      const wEmisor = document.getElementById(`wire-emisor-gnd`);
+      const wMotor = document.getElementById(`wire-motor`);
+      const wDiode = document.getElementById(`wire-diode`);
+      const wDiodeTop = document.getElementById(`wire-diode-top`);
+      const msg = document.getElementById(`circuit-status-msg`);
+
+      if (btnLed) {
+        btnLed.setAttribute(`aria-pressed`, simLedOn ? `true` : `false`);
+        btnLed.textContent = simLedOn ? `Encendido` : `Apagado`;
+      }
+      if (btnMotor) {
+        btnMotor.setAttribute(`aria-pressed`, simMotorOn ? `true` : `false`);
+        btnMotor.textContent = simMotorOn ? `Encendido` : `Apagado`;
+      }
+
+      if (wD8) wD8.classList.toggle(`active-blue`, simLedOn);
+      if (wLedGnd) wLedGnd.classList.toggle(`active-blue`, simLedOn);
+      if (led1) led1.classList.toggle(`on`, simLedOn);
+      if (led2) led2.classList.toggle(`on`, simLedOn);
+
+      if (wD9) wD9.classList.toggle(`active-orange`, simMotorOn);
+      if (wVcc) wVcc.classList.toggle(`active-red`, simMotorOn);
+      if (wEmisor) wEmisor.classList.toggle(`active-green`, simMotorOn);
+      if (wMotor) wMotor.classList.toggle(`active-green`, simMotorOn);
+      if (wDiode) wDiode.classList.toggle(`active-blue`, !simMotorOn);
+      if (wDiodeTop) wDiodeTop.classList.toggle(`active-blue`, !simMotorOn);
+
+      if (msg) {
+        if (simLedOn && simMotorOn) {
+          msg.innerHTML = `<strong>¡Todo en marcha!</strong><span>El pin D8 ilumina los ojos LED (vía 220 Ω) y el pin D9 activa el transistor NPN para que la corriente fluya desde +5V/Batería a través del motor hacia GND.</span>`;
+        } else if (simLedOn) {
+          msg.innerHTML = `<strong>Ojos encendidos (Pin D8):</strong><span>La resistencia de 220 Ω reduce la corriente para que los dos LED azules de 5 mm brillen sin quemarse.</span>`;
+        } else if (simMotorOn) {
+          msg.innerHTML = `<strong>Motor vibrando (Pin D9):</strong><span>El transistor NPN funciona como puente entre el Colector y Tierra (GND), dejando girar el motor sin sobrecargar al Arduino.</span>`;
+        } else {
+          msg.innerHTML = `<strong>En espera y protegido:</strong><span>Cada vez que apagas el motor, el diodo 1N4007 absorbe cualquier pico de voltaje inverso para cuidar al microcontrolador.</span>`;
+        }
+      }
+    }
+
+    function toggleCircuitLed() {
+      simLedOn = !simLedOn;
+      updateCircuitVisuals();
+    }
+
+    function toggleCircuitMotor() {
+      simMotorOn = !simMotorOn;
+      updateCircuitVisuals();
+    }
+
+    // --- Code Playground ---
+    function getArduinoCodeLines() {
+      const elBlinks = document.getElementById(`slider-blinks`);
+      const elVibe = document.getElementById(`slider-vibe`);
+      const elRest = document.getElementById(`slider-rest`);
+      const blinks = elBlinks ? Number(elBlinks.value) : 3;
+      const vibe = elVibe ? Number(elVibe.value) : 3000;
+      const rest = elRest ? Number(elRest.value) : 2500;
+
+      return [
+        { sec: 0, txt: `const int pinOjosLED = 8;` },
+        { sec: 0, txt: `const int pinMotor = 9;` },
+        { sec: 0, txt: `void setup() {` },
+        { sec: 0, txt: `  pinMode(pinOjosLED, OUTPUT);` },
+        { sec: 0, txt: `  pinMode(pinMotor, OUTPUT);` },
+        { sec: 0, txt: `}` },
+        { sec: -1, txt: `void loop() {` },
+        { sec: 1, txt: `  // FASE 1: Saludo luminoso` },
+        { sec: 1, txt: `  for (int i = 0; i < ${blinks}; i++) {` },
+        { sec: 1, txt: `    digitalWrite(pinOjosLED, HIGH); delay(300);` },
+        { sec: 1, txt: `    digitalWrite(pinOjosLED, LOW);  delay(300);` },
+        { sec: 1, txt: `  }` },
+        { sec: 2, txt: `  // FASE 2: Vibración activa` },
+        { sec: 2, txt: `  digitalWrite(pinOjosLED, HIGH);` },
+        { sec: 2, txt: `  digitalWrite(pinMotor, HIGH);` },
+        { sec: 2, txt: `  delay(${vibe});` },
+        { sec: 3, txt: `  // FASE 3: Pausa de descanso` },
+        { sec: 3, txt: `  digitalWrite(pinMotor, LOW);` },
+        { sec: 3, txt: `  delay(${rest});` },
+        { sec: -1, txt: `}` }
+      ];
+    }
+
+    function renderCodeBlock() {
+      const lines = getArduinoCodeLines();
+      const block = document.getElementById(`live-code-block`);
+      if (block) {
+        block.innerHTML = lines.map(function(line) {
+          const hl = line.sec === activeCodeTab ? ` highlight` : ``;
+          return `<span class="code-line${hl}">${line.txt}</span>`;
+        }).join(``);
+      }
+    }
+
+    function copyArduinoCode() {
+      const raw = getArduinoCodeLines().map(l => l.txt).join(`\n`);
+      const btn = document.getElementById(`btn-copy-code`);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(raw).then(function() {
+          if (btn) {
+            btn.textContent = `¡Copiado!`;
+            setTimeout(() => { btn.textContent = `Copiar código`; }, 1800);
+          }
+        });
+      }
+    }
+
+    function downloadArduinoCode() {
+      const raw = getArduinoCodeLines().map(l => l.txt).join(`\n`);
+      const blob = new Blob([raw], { type: `text/plain;charset=utf-8` });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement(`a`);
+      a.href = url;
+      a.download = `ecobot_robotcasc_2026.ino`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function selectCodeSection(idx) {
+      activeCodeTab = idx;
+      for (let i = 0; i < 4; i++) {
+        const tab = document.getElementById(`ctab-${i}`);
+        if (tab) {
+          tab.classList.toggle(`active`, i === idx);
+          tab.setAttribute(`aria-selected`, i === idx ? `true` : `false`);
+        }
+      }
+      const box = document.getElementById(`code-explain-box`);
+      if (box && CODE_EXPLAINS[idx]) box.innerHTML = CODE_EXPLAINS[idx];
+      renderCodeBlock();
+    }
+
+    function updateCodeParams() {
+      const elBlinks = document.getElementById(`slider-blinks`);
+      const elVibe = document.getElementById(`slider-vibe`);
+      const elRest = document.getElementById(`slider-rest`);
+      const vBlinks = document.getElementById(`val-blinks`);
+      const vVibe = document.getElementById(`val-vibe`);
+      const vRest = document.getElementById(`val-rest`);
+
+      if (elBlinks && vBlinks) {
+        const n = Number(elBlinks.value);
+        vBlinks.textContent = `${n} ${n === 1 ? `vez` : `veces`}`;
+      }
+      if (elVibe && vVibe) {
+        const ms = Number(elVibe.value);
+        vVibe.textContent = `${ms} ms (${(ms / 1000).toFixed(1)} s)`;
+      }
+      if (elRest && vRest) {
+        const ms = Number(elRest.value);
+        vRest.textContent = `${ms} ms (${(ms / 1000).toFixed(1)} s)`;
+      }
+      renderCodeBlock();
+    }
+
+    function resetCodeParams() {
+      const elBlinks = document.getElementById(`slider-blinks`);
+      const elVibe = document.getElementById(`slider-vibe`);
+      const elRest = document.getElementById(`slider-rest`);
+      if (elBlinks) elBlinks.value = 3;
+      if (elVibe) elVibe.value = 3000;
+      if (elRest) elRest.value = 2500;
+      updateCodeParams();
+    }
+
+    function setMiniDots(on) {
+      const d1 = document.getElementById(`mini-dot-1`);
+      const d2 = document.getElementById(`mini-dot-2`);
+      if (d1) d1.classList.toggle(`on`, on);
+      if (d2) d2.classList.toggle(`on`, on);
+    }
+
+    function runCustomCodeSim() {
+      const btn = document.getElementById(`btn-run-custom`);
+      const lbl = document.getElementById(`mini-sim-label`);
+      const sub = document.getElementById(`mini-sim-sub`);
+
+      if (codeSimRunning) {
+        codeSimRunning = false;
+        clearTimeout(codeSimTimer);
+        setMiniDots(false);
+        if (btn) btn.textContent = `Probar este código`;
+        if (lbl) lbl.textContent = `Simulación detenida`;
+        if (sub) sub.textContent = `Ajusta los controles y vuelve a probar`;
+        return;
+      }
+
+      const elBlinks = document.getElementById(`slider-blinks`);
+      const elVibe = document.getElementById(`slider-vibe`);
+      const elRest = document.getElementById(`slider-rest`);
+      const blinks = elBlinks ? Number(elBlinks.value) : 3;
+      const vibe = elVibe ? Number(elVibe.value) : 3000;
+      const rest = elRest ? Number(elRest.value) : 2500;
+
+      codeSimRunning = true;
+      if (btn) btn.textContent = `Detener prueba`;
+
+      let toggleCount = 0;
+      const totalToggles = blinks * 2;
+      selectCodeSection(1);
+      if (lbl) lbl.textContent = `Fase 1: Saludando (${blinks} parpadeos)`;
+      if (sub) sub.textContent = `Ejecutando bucle for...`;
+
+      function stepBlink() {
+        if (!codeSimRunning) return;
+        if (toggleCount < totalToggles) {
+          setMiniDots(toggleCount % 2 === 0);
+          toggleCount++;
+          codeSimTimer = setTimeout(stepBlink, 300);
+        } else {
+          selectCodeSection(2);
+          setMiniDots(true);
+          if (lbl) lbl.textContent = `Fase 2: Vibrando (${(vibe / 1000).toFixed(1)} s)`;
+          if (sub) sub.textContent = `Ojos fijos + Motor encendido`;
+
+          codeSimTimer = setTimeout(function() {
+            if (!codeSimRunning) return;
+            selectCodeSection(3);
+            if (lbl) lbl.textContent = `Fase 3: Descansando (${(rest / 1000).toFixed(1)} s)`;
+            if (sub) sub.textContent = `Motor apagado, esperando siguiente ciclo`;
+
+            codeSimTimer = setTimeout(function() {
+              if (!codeSimRunning) return;
+              codeSimRunning = false;
+              setMiniDots(false);
+              if (btn) btn.textContent = `Probar este código`;
+              if (lbl) lbl.textContent = `Ciclo completado`;
+              if (sub) sub.textContent = `¡Listo! Así se ejecutará en tu Arduino UNO`;
+            }, rest);
+          }, vibe);
+        }
+      }
+      stepBlink();
+    }
+
+    // --- Checklist ---
+    function toggleChecklist(idx) {
+      checklistState[idx] = !checklistState[idx];
+      const card = document.getElementById(`chk-${idx}`);
+      if (card) {
+        card.setAttribute(`aria-pressed`, checklistState[idx] ? `true` : `false`);
+        const box = card.querySelector(`.check-box`);
+        if (box) box.textContent = checklistState[idx] ? `✓` : `${idx + 1}`;
+      }
+      const done = checklistState.filter(Boolean).length;
+      const prog = document.getElementById(`checklist-progress`);
+      if (prog) {
+        prog.textContent = done === 4 ? `4 de 4 completadas · ¡Listo para la feria!` : `${done} de 4 completadas`;
+      }
+    }
+
+    // --- Speech Practice Mode ---
+    function resetSpeechHighlights() {
+      for (let i = 0; i < 4; i++) {
+        const p = document.getElementById(`sp-${i}`);
+        if (p) {
+          p.classList.remove(`active`);
+          p.classList.remove(`dimmed`);
+        }
+      }
+    }
+
+    function toggleSpeechPractice() {
+      const btn = document.getElementById(`btn-speech-practice`);
+      const badge = document.getElementById(`speech-timer-badge`);
+
+      if (speechRunning) {
+        speechRunning = false;
+        clearTimeout(speechTimer);
+        resetSpeechHighlights();
+        if (btn) btn.textContent = `Practicar paso a paso`;
+        if (badge) badge.textContent = `Listo para ensayar`;
+        return;
+      }
+
+      speechRunning = true;
+      if (btn) btn.textContent = `Detener ensayo`;
+      const durations = [16000, 24000, 28000, 14000];
+      let current = 0;
+
+      function showPara() {
+        if (!speechRunning) return;
+        if (current >= 4) {
+          speechRunning = false;
+          resetSpeechHighlights();
+          if (btn) btn.textContent = `Practicar otra vez`;
+          if (badge) badge.textContent = `¡Excelente presentación!`;
+          return;
+        }
+        for (let i = 0; i < 4; i++) {
+          const p = document.getElementById(`sp-${i}`);
+          if (p) {
+            p.classList.toggle(`active`, i === current);
+            p.classList.toggle(`dimmed`, i !== current);
+          }
+        }
+        if (badge) badge.textContent = `Parte ${current + 1} de 4 · Lee en voz alta`;
+        const waitMs = durations[current];
+        current++;
+        speechTimer = setTimeout(showPara, waitMs);
+      }
+      showPara();
+    }
+
+    // --- Quiz ---
+    function answerQuiz(btn, qIdx, isCorrect) {
+      const parent = btn.parentElement;
+      if (parent) {
+        const opts = parent.querySelectorAll(`.quiz-opt`);
+        opts.forEach(function(o) {
+          o.classList.remove(`correct`);
+          o.classList.remove(`wrong`);
+        });
+      }
+      btn.classList.add(isCorrect ? `correct` : `wrong`);
+      const fb = document.getElementById(`qfb-${qIdx}`);
+      const data = QUIZ_FEEDBACK[qIdx];
+      if (fb && data) {
+        fb.textContent = isCorrect ? data.ok : data.bad;
+      }
+    }
+
+    // --- Scroll Reveal & Keyboard Support ---
+    document.addEventListener(`DOMContentLoaded`, function() {
+      selectPart(0);
+      selectStep(0);
+      renderCodeBlock();
+      updateCodeParams();
+
+      const hotspots = document.querySelectorAll(`.svg-hotspot`);
+      hotspots.forEach(function(el, i) {
+        el.addEventListener(`keydown`, function(e) {
+          if (e.key === `Enter` || e.key === ` `) {
+            e.preventDefault();
+            selectPart(i);
+          }
+        });
+      });
+
+      const reveals = document.querySelectorAll(`.reveal`);
+      if (`IntersectionObserver` in window) {
+        const obs = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add(`visible`);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        reveals.forEach(function(el) { obs.observe(el); });
+      } else {
+        reveals.forEach(function(el) { el.classList.add(`visible`); });
+      }
+    });
+  </script>
+</body>
+</html>
